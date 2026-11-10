@@ -101,7 +101,7 @@ function showLogin(msg){
   let w = document.getElementById("loginWrap");
   if(!w){ w = document.createElement("div"); w.id = "loginWrap"; w.className = "login-wrap"; document.body.appendChild(w); }
   w.innerHTML = `<form class="login" id="loginForm" autocomplete="on">
-    <div class="login-head"><img class="login-wordmark" src="img/NextGen.png" alt="NEXT GEN · Service Integration"><div class="login-div"></div><div class="login-head-tx">Technical Department</div></div>
+    <div class="login-head"><img class="login-wordmark" src="img/NextGen.png" alt="NEXT GEN · Service Integration"><div class="login-div"></div><div class="login-head-tx">Technical Management</div></div>
     <div class="login-sep"></div>
     <div class="login-intro"><h1>Phòng Kỹ thuật</h1><p>Quản trị công việc và nguồn lực</p></div>
     <div class="field"><label for="lgU">Tên đăng nhập</label><input class="inp" id="lgU" name="username" autocomplete="username" required></div>
