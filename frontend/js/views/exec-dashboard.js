@@ -70,6 +70,11 @@ function donut(segs, center, sub, size){
     <text x="50%" y="${sub?"48%":"52%"}" text-anchor="middle" dominant-baseline="middle" font-size="${size>120?22:19}" font-weight="800" fill="var(--ink)">${esc(center)}</text>
     ${sub?`<text x="50%" y="64%" text-anchor="middle" font-size="12" fill="var(--ink-2)">${esc(sub)}</text>`:""}</svg>`;
 }
+/* Đồng hồ ở banner lời chào: vẽ sẵn lúc render, rồi tự cập nhật 30 giây/lần mà không render lại cả trang */
+const EX_WD = ["Chủ nhật","Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7"];
+function exClockText(){ const d = new Date(), p = n => String(n).padStart(2,"0");
+  return `${EX_WD[d.getDay()]}, ${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}`; }
+setInterval(() => { const el = document.getElementById("exClock"); if(el) el.textContent = exClockText(); }, 30000);
 function viewExec(){
   const kind = S.period || "week";
   const P = periodInfo(S.week, kind);
@@ -124,11 +129,13 @@ function viewExec(){
   const fr = active.filter(t=>(t.ms||0)>=1).sort((a,b)=>(b.ms||0)-(a.ms||0) || String(a.deadline||"9").localeCompare(String(b.deadline||"9")));
 
   let h = `<div class="ex">
-  <div class="head"><h1>Dashboard</h1>
+  <section class="ex-hero"><div class="ex-hero-l"><span class="ex-wave" aria-hidden="true">👋</span><div><h1>Xin chào, ${esc(S.user?.display_name||S.user?.username||"")}</h1>
+      <p><b>Dashboard</b><span class="ex-dot" aria-hidden="true">·</span>Phòng Kỹ thuật<span class="ex-dot" aria-hidden="true">•</span><span id="exClock">${exClockText()}</span><span class="pill mute">${esc(ROLE_LABEL[S.user?.role]||"Nhân viên")}</span></p></div></div>
+    <div class="ex-slogan" lang="en">Do good things<svg viewBox="0 0 200 16" aria-hidden="true"><path d="M6 11 C 60 3, 130 3, 196 9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
     <div class="ex-ctl"><div class="ex-wk"><button data-act="exnav" data-d="-1" aria-label="Kỳ trước">‹</button><div class="lb">${esc(P.label)}</div><button data-act="exnav" data-d="1" aria-label="Kỳ sau">›</button></div>
       <div class="ex-seg" role="group" aria-label="Kỳ báo cáo">${[["week","Tuần"],["month","Tháng"],["year","Năm"]].map(([k,l])=>`<button data-act="exper" data-k="${k}" aria-pressed="${kind===k}">${l}</button>`).join("")}</div>
       ${scopeToggleHtml()}
-      <button class="btn icon" data-act="exrefresh" title="Làm mới" aria-label="Làm mới">${ICONS.refresh}</button></div></div>`;
+      <button class="btn icon" data-act="exrefresh" title="Làm mới" aria-label="Làm mới">${ICONS.refresh}</button></div></section>`;
   // KPI row
   h += `<div class="ex-kpis">
     <div class="ex-card"><h4>Công việc đang thực hiện</h4><div class="ex-k"><div class="ex-ico info">${ICONS.task}</div><div><div><span class="ex-big">${inProgressN}</span></div>
